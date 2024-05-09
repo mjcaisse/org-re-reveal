@@ -2788,6 +2788,9 @@ INFO is a plist holding contextual information.  CONTENTS is unused."
                      (org-html-format-code src-block info))))
            (code-attribs (or (org-export-read-attribute
                               :attr_reveal src-block :code_attribs) ""))
+           (data-id (let ((did (org-export-read-attribute :attr_reveal src-block :data_id)))
+		      (if (not did) ""
+			(format " data-id=\"%s\"" did))))
            (label (let ((lbl (org-element-property :name src-block)))
                     (if (not lbl) ""
                       (format " id=\"%s\"" lbl))))
@@ -2810,9 +2813,9 @@ INFO is a plist holding contextual information.  CONTENTS is unused."
                           (if lang
                               (format " class=\"src src-%s\"" lang)
                             " class=\"example\"")))
-             (pre-tag (format "<pre%s%s>"
+             (pre-tag (format "<pre%s%s%s>"
                               (if attr-html attr-string pre-class)
-                              label)))
+                              label data-id)))
         (if (not lang)
             (format "%s\n%s</pre>" pre-tag code)
           (if klipsify
